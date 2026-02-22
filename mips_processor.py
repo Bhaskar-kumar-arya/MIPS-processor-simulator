@@ -33,7 +33,7 @@ class MIPSProcessor:
 
 
     def print_state(self):
-        print(f"CYCLE STATE : PC={hex(self.pc)}")
+        print(f"Cycle State : PC={hex(self.pc)}")
         print("Pipeline Stages :")
         print(f"  IF/ID : {self.if_id}")
         
@@ -62,7 +62,7 @@ class MIPSProcessor:
         print("Data Memory:")
         print(sorted_mem)
 
-    def _IF(self):
+    def instruction_fetch(self):
         idx = (self.pc - self.start_pc) // 4
         if 0 <= idx < len(self.instruction_memory):
             instr = self.instruction_memory[idx]
@@ -72,7 +72,7 @@ class MIPSProcessor:
             self.if_id['instr'] = '0' * 32
             self.if_id['pc_next'] = self.pc + 4
 
-    def _ID(self):
+    def instruction_decode(self):
         if not self.if_id:
             return
 
@@ -113,7 +113,7 @@ class MIPSProcessor:
             'instr': instr
         }
 
-    def _EX(self):
+    def execute(self):
         if not self.id_ex:
             return
 
@@ -239,7 +239,7 @@ class MIPSProcessor:
             'pc_target': pc_target
         }
 
-    def _Mem(self):
+    def memory_access(self):
         if not self.ex_mem:
             return
 
@@ -267,7 +267,7 @@ class MIPSProcessor:
         else:
             self.pc = self.if_id['pc_next']
 
-    def _WB(self):
+    def write_back(self):
         if not self.mem_wb:
             return
 
@@ -282,7 +282,7 @@ class MIPSProcessor:
 
     def step(self):
         if not self.halted:
-            self._IF()
+            self.instruction_fetch()
             if not self.halted:
                 self._ID()
                 self._EX()
@@ -319,6 +319,6 @@ final_array = []
 for i in range(5) :
     final_array.append(processor.data_memory.get(0x10010000 + i*4, 0))
 
-print("           FINAL RESULTS          ")
+print("           Final Results  :       ")
 print(f"Initial Array Values : {initial_array}")
 print(f"Final Sorted Array   : {final_array}")
