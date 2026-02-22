@@ -1,5 +1,4 @@
-# MIPS Bubble Sort
-# This program will store 5 values into memory and sort them in ascending order.
+# This program will sort an array of length n in ascending order using bubble sort.
 # The array starts at memory address 0x1000
 
 .data
@@ -58,6 +57,6 @@ next_outer:
     j    outer_loop
     
 exit_sort:
-    # Set syscall number for exit (10)
+    # Set syscall number for exit 
     addi $v0, $zero, 10
     syscall
